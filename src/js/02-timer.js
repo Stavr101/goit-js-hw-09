@@ -1,15 +1,19 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import Notiflix from 'notiflix';
+
+import { Report } from 'notiflix/build/notiflix-report-aio';
 
 const refs = {
   myInput: document.querySelector('#datetime-picker'),
+  startBtn: document.querySelector('button[data-start]'),
   days: document.querySelector('[data-days]'),
   hours: document.querySelector('[data-hours]'),
   minutes: document.querySelector('[data-minutes]'),
   seconds: document.querySelector('[data-seconds]'),
 };
 
-const myInput = document.querySelector('#datetime-picker');
+refs.startBtn.disabled = true;
 
 const options = {
   enableTime: true,
@@ -17,15 +21,53 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
-    if (this.defaultDate > selectedDates[0]) {
-      window.alert('Please choose a date in the future');
-      // .flatpickr(myInput, options);
-    }
+    console.log(selectedDates[0]); if (delta) {
+    Report.info(' ', '"Please choose a date in the future"', 'Okay').flatpickr(
+      refs.myInput,
+      options
+    );
   },
 };
 
-flatpickr(myInput, options);
+flatpickr(refs.myInput, options);
+
+//
+const delta = options.selectedDates[0] - options.defaultDate;
+
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+
+  // Remaining days
+  const days = Math.floor(ms / day);
+  // Remaining hours
+  const hours = Math.floor((ms % day) / hour);
+  // Remaining minutes
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  // Remaining seconds
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+
+ 
+  } else {
+    refs.days.textContent = days < 10 ? `0${days}` : days;
+    refs.hours.textContent = hours < 10 ? `0${hours}` : hours;
+    refs.minutes.textContent = minutes < 10 ? `0${minutes}` : minutes;
+    refs.seconds.textContent = seconds < 10 ? `0${seconds}` : seconds;
+    //   }
+    return { days, hours, minutes, seconds };
+  }
+}
+
+console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
+console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+
+// addLeadingZero(value);
+
+// padStart();
 
 // function timer() {
 //   const today = new Date();

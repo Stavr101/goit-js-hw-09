@@ -21,20 +21,23 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]); if (delta) {
-    Report.info(' ', '"Please choose a date in the future"', 'Okay').flatpickr(
-      refs.myInput,
-      options
-    );
+    const delta = selectedDates[0].getTime() - new Date().getTime();
+    console.log(delta);
+
+    if (new Date().getTime() >= selectedDates[0].getTime()) {
+      Report.info(' ', '"Please choose a date in the future"', 'Okay');
+    } else {
+      refs.startBtn.disabled = false;
+    }
+    return delta;
   },
 };
 
+console.log(options.delta);
+
 flatpickr(refs.myInput, options);
 
-//
-const delta = options.selectedDates[0] - options.defaultDate;
-
-function convertMs(ms) {
+function convertMs(delta) {
   // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
@@ -42,23 +45,15 @@ function convertMs(ms) {
   const day = hour * 24;
 
   // Remaining days
-  const days = Math.floor(ms / day);
+  const days = Math.floor(delta / day);
   // Remaining hours
-  const hours = Math.floor((ms % day) / hour);
+  const hours = Math.floor((delta % day) / hour);
   // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const minutes = Math.floor(((delta % day) % hour) / minute);
   // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  const seconds = Math.floor((((delta % day) % hour) % minute) / second);
 
- 
-  } else {
-    refs.days.textContent = days < 10 ? `0${days}` : days;
-    refs.hours.textContent = hours < 10 ? `0${hours}` : hours;
-    refs.minutes.textContent = minutes < 10 ? `0${minutes}` : minutes;
-    refs.seconds.textContent = seconds < 10 ? `0${seconds}` : seconds;
-    //   }
-    return { days, hours, minutes, seconds };
-  }
+  return { days, hours, minutes, seconds };
 }
 
 console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}

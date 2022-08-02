@@ -54,6 +54,7 @@ function updateClockface({ days, hours, minutes, seconds }) {
 }
 
 refs.startBtn.addEventListener('click', () => {
+  refs.startBtn.disabled = true;
   timerId = setInterval(() => {
     const delta = d - Date.now();
     // console.log(d);

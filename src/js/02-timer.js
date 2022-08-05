@@ -57,9 +57,14 @@ refs.startBtn.addEventListener('click', () => {
   refs.startBtn.disabled = true;
   timerId = setInterval(() => {
     const delta = d - Date.now();
-    // console.log(d);
-    const a = convertMs(delta);
-    updateClockface(a);
+    console.log(d);
+    if (delta <= 0) {
+      clearInterval(timerId);
+      return;
+    } else {
+      const a = convertMs(delta);
+      updateClockface(a);
+    }
   }, 1000);
 });
 

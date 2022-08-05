@@ -7,6 +7,11 @@ const refs = {
   amount: document.querySelector('.input[name="amount"]'),
 };
 
+document.querySelector('input[name="delay"]').setAttribute('min', 0);
+document.querySelector('input[name="step"]').setAttribute('min', 0);
+document.querySelector('input[name="amount"]').setAttribute('min', 0);
+// refs.delay.setAttribute('min', 0);
+
 refs.form.addEventListener('submit', onSubmit);
 
 function onSubmit(event) {
